@@ -1,11 +1,10 @@
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException {
+        DaoFactory daoFactory = new DaoFactory();
 
-
-        ConnectionMaker connectionMaker = new MySqlConnectionMaker();
-        UserDao userDao = new UserDao(connectionMaker);
+        UserDao userDao = daoFactory.userDao();
 
         userDao.deleteAll();
 
