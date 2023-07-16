@@ -2,7 +2,9 @@ import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new MySqlUserDao();
+
+        SimpleConnectionMaker simpleConnectionMaker = new SimpleConnectionMaker();
+        UserDao userDao = new UserDao(simpleConnectionMaker);
 
         userDao.deleteAll();
 

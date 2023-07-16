@@ -1,10 +1,16 @@
 import java.sql.*;
 
-public abstract class UserDao {
+public class UserDao {
+
+    private final SimpleConnectionMaker simpleConnectionMaker;
+
+    public UserDao(SimpleConnectionMaker simpleConnectionMaker) {
+        this.simpleConnectionMaker = simpleConnectionMaker;
+    }
 
     public void add(User user) throws SQLException {
 
-        Connection connection = getConnection();
+        Connection connection = simpleConnectionMaker.makeConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "insert into users(id, username, password) values (?,?,?)");
@@ -20,8 +26,7 @@ public abstract class UserDao {
 
     public User getById(String id) throws SQLException {
 
-        Connection connection = getConnection();
-
+        Connection connection = simpleConnectionMaker.makeConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "select * from users where id = ?");
@@ -42,7 +47,7 @@ public abstract class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = simpleConnectionMaker.makeConnection();
 
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "delete from users"
@@ -52,8 +57,6 @@ public abstract class UserDao {
 
         closeConnection(preparedStatement, connection);
     }
-
-    protected abstract Connection getConnection();
 
     private void closeConnection(PreparedStatement preparedStatement, Connection connection) {
         try {
