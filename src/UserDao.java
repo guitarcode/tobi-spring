@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class UserDao {
+public abstract class UserDao {
 
     public void add(User user) throws SQLException {
 
@@ -53,14 +53,7 @@ public class UserDao {
         closeConnection(preparedStatement, connection);
     }
 
-    private Connection getConnection() {
-        try {
-            return DriverManager.getConnection("jdbc:mysql://localhost/tobi", "root", "root");
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    protected abstract Connection getConnection();
 
     private void closeConnection(PreparedStatement preparedStatement, Connection connection) {
         try {
