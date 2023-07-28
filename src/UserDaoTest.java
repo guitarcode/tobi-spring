@@ -4,7 +4,10 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class UserDaoTest {
+
 
     @Test
     public void addAndGet() throws SQLException {
@@ -20,10 +23,12 @@ public class UserDaoTest {
         addUser.setPassword("1010");
 
         userDao.add(addUser);
+        assertEquals(1, userDao.getCount());
+
 
         User getUser = userDao.getById("semin");
 
-        Assertions.assertEquals(addUser.getUserName(), getUser.getUserName());
-        Assertions.assertEquals(addUser.getPassword(), getUser.getPassword());
+        assertEquals(addUser.getUserName(), getUser.getUserName());
+        assertEquals(addUser.getPassword(), getUser.getPassword());
     }
 }

@@ -63,7 +63,25 @@ public class UserDao {
 
         preparedStatement.executeUpdate();
 
+
         closeConnection(preparedStatement, connection);
+    }
+
+    public long getCount() throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "select count(*) as userCount from users"
+        );
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+
+        long userCount = resultSet.getLong("userCount");
+
+        closeConnection(preparedStatement, connection);
+
+        return userCount;
     }
 
     private void closeConnection(PreparedStatement preparedStatement, Connection connection) {
