@@ -1,11 +1,9 @@
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.ApplicationContext;
 
 import java.sql.SQLException;
 
-public class ContextTest {
-    public static void main(String[] args) throws SQLException {
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(DaoFactory.class);
-
+public class DaoTestCode {
+    public static void baseDaoTestCode(ApplicationContext ac) throws SQLException {
         UserDao userDao = ac.getBean("userDao", UserDao.class);
 
         userDao.deleteAll();
