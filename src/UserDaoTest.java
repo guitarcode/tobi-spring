@@ -1,10 +1,9 @@
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserDaoTest {
 
@@ -16,6 +15,7 @@ public class UserDaoTest {
         UserDao userDao = ac.getBean("userDao", UserDao.class);
 
         userDao.deleteAll();
+        assertEquals(0, userDao.getCount());
 
         User addUser = new User();
         addUser.setId("semin");
