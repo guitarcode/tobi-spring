@@ -1,6 +1,8 @@
 package tobi.test;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import tobi.EmptyResultDataAccess;
@@ -10,55 +12,54 @@ import tobi.UserDao;
 import java.sql.SQLException;
 
 
+
 public class UserDaoTestWithJunit5 {
+
+    UserDao userDao;
+    User user1;
+    User user2;
+    User user3;
+
+    @BeforeEach
+    public void setUp() {
+        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("tobi/applicationContext.xml");
+
+        userDao = ac.getBean("userDao", UserDao.class);
+
+        user1 = new User("semin", "최세민", "1010");
+        user2 = new User("tobi", "토비", "0729");
+        user3 = new User("younghan", "영한", "0729");
+    }
+
+    @AfterEach
+    public void destroy() throws SQLException {
+        userDao.deleteAll();
+    }
 
 
     @Test
     public void addAndGet() throws SQLException {
-        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("tobi/applicationContext.xml");
-
-        UserDao userDao = ac.getBean("userDao", UserDao.class);
-
-        userDao.deleteAll();
-        Assertions.assertEquals(0, userDao.getCount());
-
-        User addUser1 = new User("semin", "최세민", "1010");
-        User addUser2 = new User("tobi", "토비", "0729");
-
-        userDao.add(addUser1);
-        userDao.add(addUser2);
-        Assertions.assertEquals(2, userDao.getCount());
-
+        userDao.add(user1);
+        userDao.add(user2);
+        userDao.add(user3);
 
         User getUser = userDao.getById("semin");
 
-        Assertions.assertEquals(addUser1.getUserName(), getUser.getUserName());
-        Assertions.assertEquals(addUser1.getPassword(), getUser.getPassword());
+        Assertions.assertEquals(user1.getUserName(), getUser.getUserName());
+        Assertions.assertEquals(user1.getPassword(), getUser.getPassword());
     }
 
     @Test
     public void count() throws SQLException {
-        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("tobi/applicationContext.xml");
+        userDao.add(user1);
+        userDao.add(user2);
+        userDao.add(user3);
 
-        UserDao userDao = ac.getBean("userDao", UserDao.class);
-
-        userDao.deleteAll();
-        Assertions.assertEquals(0, userDao.getCount());
-
-        User addUser1 = new User("semin", "최세민", "1010");
-        User addUser2 = new User("tobi", "토비", "0729");
-
-        userDao.add(addUser1);
-        userDao.add(addUser2);
-        Assertions.assertEquals(2, userDao.getCount());
+        Assertions.assertEquals(3, userDao.getCount());
     }
 
     @Test
-    public void notPresentGet() throws SQLException {
-        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("tobi/applicationContext.xml");
-
-        UserDao userDao = ac.getBean("userDao", UserDao.class);
-
+    public void notPresentGet() {
         Assertions.assertThrows(EmptyResultDataAccess.class, () -> userDao.getById("not_present"));
     }
 }
