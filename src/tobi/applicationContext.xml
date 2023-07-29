@@ -10,7 +10,7 @@
         <constructor-arg index="2" value="root"> </constructor-arg>
         <constructor-arg index="3" value="root"> </constructor-arg>
     </bean>
-    <bean id="userDao" class="UserDao">
+    <bean id="userDao" class="tobi.UserDao">
         <constructor-arg index="0" ref="dataSource"> </constructor-arg>
 <!--        <property name="connectionMaker" ref="connectionMaker"> </property>-->
     </bean>

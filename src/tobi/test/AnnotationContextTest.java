@@ -1,4 +1,8 @@
+package tobi.test;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import tobi.DaoFactory;
+import tobi.DaoTestCode;
 
 import java.sql.SQLException;
 

@@ -1,3 +1,5 @@
+package tobi;
+
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -41,14 +43,19 @@ public class UserDao {
         ps.setString(1, id);
 
         ResultSet resultSet = ps.executeQuery();
-        resultSet.next();
 
-        User user = new User();
-        user.setId(resultSet.getString("id"));
-        user.setUserName(resultSet.getString("username"));
-        user.setPassword(resultSet.getString("password"));
+        User user = null;
 
-        resultSet.close();
+        if (resultSet.next()) {
+            user = new User();
+
+            user.setId(resultSet.getString("id"));
+            user.setUserName(resultSet.getString("username"));
+            user.setPassword(resultSet.getString("password"));
+        } else {
+            throw new EmptyResultDataAccess();
+        }
+
         closeConnection(ps, connection);
         return user;
     }

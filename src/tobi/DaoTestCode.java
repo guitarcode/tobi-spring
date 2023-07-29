@@ -1,3 +1,5 @@
+package tobi;
+
 import org.springframework.context.ApplicationContext;
 
 import java.sql.SQLException;

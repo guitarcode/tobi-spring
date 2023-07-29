@@ -1,6 +1,10 @@
+package tobi.test;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import tobi.User;
+import tobi.UserDao;
 
 import java.sql.SQLException;
 
@@ -8,7 +12,7 @@ public class UserDaoTestWithJunit4 {
 
     @Test
     public void addAndGet() throws SQLException {
-        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("applicationContext.xml");
+        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("tobi/applicationContext.xml");
 
         UserDao userDao = ac.getBean("userDao", UserDao.class);
 
