@@ -4,17 +4,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.support.GenericXmlApplicationContext;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tobi.EmptyResultDataAccess;
 import tobi.User;
 import tobi.UserDao;
 
 import java.sql.SQLException;
 
-
-
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(locations = {"/tobi/applicationContextTest.xml"})
 public class UserDaoTestWithJunit5 {
 
+    @Autowired
     UserDao userDao;
     User user1;
     User user2;
@@ -22,10 +26,6 @@ public class UserDaoTestWithJunit5 {
 
     @BeforeEach
     public void setUp() {
-        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("tobi/applicationContext.xml");
-
-        userDao = ac.getBean("userDao", UserDao.class);
-
         user1 = new User("semin", "최세민", "1010");
         user2 = new User("tobi", "토비", "0729");
         user3 = new User("younghan", "영한", "0729");

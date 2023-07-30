@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="driver" class="com.mysql.cj.jdbc.Driver"> </bean>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <constructor-arg index="0" ref="driver"> </constructor-arg>
+        <constructor-arg index="1" value="jdbc:mysql://localhost/tobi_test"> </constructor-arg>
+        <constructor-arg index="2" value="root"> </constructor-arg>
+        <constructor-arg index="3" value="root"> </constructor-arg>
+    </bean>
+    <bean id="userDao" class="tobi.UserDao">
+        <constructor-arg index="0" ref="dataSource"> </constructor-arg>
+    </bean>
+</beans>
