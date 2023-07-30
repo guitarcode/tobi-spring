@@ -17,19 +17,45 @@ public class UserDao {
         this.dataSource = connectionMaker;
     }
 
-    public void add(User user) throws SQLException {
-        Connection connection = dataSource.getConnection();
+    public void jdbcContextWithStatementStrategy(StatementStrategy strategy) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
 
-        PreparedStatement ps = connection.prepareStatement(
-                "insert into users(id, username, password) values (?,?,?)");
+        try {
+            connection = dataSource.getConnection();
+            preparedStatement = strategy.makeStatement(connection);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+            }
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+            }
+        }
+    }
 
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getUserName());
-        ps.setString(3, user.getPassword());
+    public void add(User user) {
+        jdbcContextWithStatementStrategy(new StatementStrategy() {
+            @Override
+            public PreparedStatement makeStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(
+                        "insert into users(id, username, password) values (?,?,?)");
 
-        ps.executeUpdate();
+                ps.setString(1, user.getId());
+                ps.setString(2, user.getUserName());
+                ps.setString(3, user.getPassword());
 
-        closeConnection(ps, connection);
+                return ps;
+            }
+        });
     }
 
     public User getById(String id) throws SQLException {
@@ -60,18 +86,15 @@ public class UserDao {
         return user;
     }
 
-    public void deleteAll() throws SQLException {
-
-        Connection connection = dataSource.getConnection();
-
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "delete from users"
-        );
-
-        preparedStatement.executeUpdate();
-
-
-        closeConnection(preparedStatement, connection);
+    public void deleteAll() {
+        jdbcContextWithStatementStrategy(new StatementStrategy() {
+            @Override
+            public PreparedStatement makeStatement(Connection connection) throws SQLException {
+                return connection.prepareStatement(
+                        "delete from users"
+                );
+            }
+        });
     }
 
     public long getCount() throws SQLException {
