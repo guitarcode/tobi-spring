@@ -1,10 +1,8 @@
-package tobi.test;
+package tobi;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.support.GenericXmlApplicationContext;
-import tobi.User;
-import tobi.UserDao;
 
 import java.sql.SQLException;
 
@@ -12,7 +10,7 @@ public class UserDaoTestWithJunit4 {
 
     @Test
     public void addAndGet() throws SQLException {
-        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("tobi/applicationContext.xml");
+        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("applicationContext.xml");
 
         UserDao userDao = ac.getBean("userDao", UserDao.class);
 
@@ -28,7 +26,7 @@ public class UserDaoTestWithJunit4 {
 
         User getUser = userDao.getById("semin");
 
-        Assert.assertEquals(addUser.getUserName(), getUser.getUserName());
-        Assert.assertEquals(addUser.getPassword(), getUser.getPassword());
+        Assertions.assertEquals(addUser.getUserName(), getUser.getUserName());
+        Assertions.assertEquals(addUser.getPassword(), getUser.getPassword());
     }
 }

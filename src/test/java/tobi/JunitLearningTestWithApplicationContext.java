@@ -1,4 +1,4 @@
-//package tobi.test;
+package tobi;//package tobi.test;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = "/tobi/junitTestContext.xml")
+@ContextConfiguration(locations = "/junitTestContext.xml")
 public class JunitLearningTestWithApplicationContext {
     @Autowired
     ApplicationContext applicationContext;

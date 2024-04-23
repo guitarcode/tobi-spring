@@ -1,4 +1,4 @@
-package tobi.test;
+package tobi;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import tobi.DaoFactory;

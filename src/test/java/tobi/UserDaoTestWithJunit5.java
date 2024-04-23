@@ -1,4 +1,4 @@
-package tobi.test;
+package tobi;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -8,14 +8,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import tobi.EmptyResultDataAccess;
-import tobi.User;
-import tobi.UserDao;
 
 import java.sql.SQLException;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = {"/tobi/applicationContextTest.xml"})
+@ContextConfiguration(locations = {"/applicationContextTest.xml"})
 public class UserDaoTestWithJunit5 {
 
     @Autowired

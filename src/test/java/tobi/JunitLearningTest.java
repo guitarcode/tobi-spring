@@ -1,4 +1,4 @@
-package tobi.test;
+package tobi;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
