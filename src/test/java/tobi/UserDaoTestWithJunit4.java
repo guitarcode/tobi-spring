@@ -18,7 +18,7 @@ public class UserDaoTestWithJunit4 {
 
         User addUser = new User();
         addUser.setId("semin");
-        addUser.setUserName("최세민");
+        addUser.setUsername("최세민");
         addUser.setPassword("1010");
 
         userDao.add(addUser);
@@ -26,7 +26,7 @@ public class UserDaoTestWithJunit4 {
 
         User getUser = userDao.getById("semin");
 
-        Assertions.assertEquals(addUser.getUserName(), getUser.getUserName());
+        Assertions.assertEquals(addUser.getUsername(), getUser.getUsername());
         Assertions.assertEquals(addUser.getPassword(), getUser.getPassword());
     }
 }

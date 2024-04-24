@@ -12,12 +12,12 @@ public class DaoTestCode {
 
         User newUser = new User();
         newUser.setId("semin");
-        newUser.setUserName("최세민");
+        newUser.setUsername("최세민");
         newUser.setPassword("semin");
 
         userDao.add(newUser);
 
         User getUser = userDao.getById("semin");
-        System.out.println("getUser.getUserName() = " + getUser.getUserName());
+        System.out.println("getUser.getUserName() = " + getUser.getUsername());
     }
 }

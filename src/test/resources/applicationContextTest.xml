@@ -11,6 +11,6 @@
         <constructor-arg index="3" value="root"> </constructor-arg>
     </bean>
     <bean id="userDao" class="tobi.UserDao">
-        <constructor-arg index="0" ref="dataSource"> </constructor-arg>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 </beans>

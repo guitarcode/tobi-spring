@@ -1,10 +1,23 @@
 package tobi;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 
 public class UserDao {
     private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
+
+    private RowMapper<User> mapper = (rs, rowNum) -> {
+        return new User(
+                rs.getString("id"),
+                rs.getString("username"),
+                rs.getString("password")
+        );
+    };
 
     public UserDao() {
     }
@@ -13,113 +26,35 @@ public class UserDao {
         this.dataSource = dataSource;
     }
 
-    public void setConnectionMaker(DataSource connectionMaker) {
-        this.dataSource = connectionMaker;
-    }
-
-    public void jdbcContextWithStatementStrategy(StatementStrategy strategy) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            connection = dataSource.getConnection();
-            preparedStatement = strategy.makeStatement(connection);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-            } catch (SQLException e) {
-            }
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-            }
-        }
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     public void add(User user) {
-        jdbcContextWithStatementStrategy(new StatementStrategy() {
-            @Override
-            public PreparedStatement makeStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(
-                        "insert into users(id, username, password) values (?,?,?)");
-
-                ps.setString(1, user.getId());
-                ps.setString(2, user.getUserName());
-                ps.setString(3, user.getPassword());
-
-                return ps;
-            }
-        });
+        jdbcTemplate.update("insert into users(id, username, password) values (?,?,?)",
+                user.getId(),
+                user.getUsername(),
+                user.getPassword());
     }
 
     public User getById(String id) throws SQLException {
-
-
-        Connection connection = dataSource.getConnection();
-
-        PreparedStatement ps = connection.prepareStatement(
-                "select * from users where id = ?");
-
-        ps.setString(1, id);
-
-        ResultSet resultSet = ps.executeQuery();
-
-        User user = null;
-
-        if (resultSet.next()) {
-            user = new User();
-
-            user.setId(resultSet.getString("id"));
-            user.setUserName(resultSet.getString("username"));
-            user.setPassword(resultSet.getString("password"));
-        } else {
-            throw new EmptyResultDataAccess();
-        }
-
-        closeConnection(ps, connection);
-        return user;
+        List<User> users = jdbcTemplate.query(
+                "select * from users where id = ?",
+                mapper,
+                id
+        );
+        return users.get(0);
     }
 
     public void deleteAll() {
-        jdbcContextWithStatementStrategy(new StatementStrategy() {
-            @Override
-            public PreparedStatement makeStatement(Connection connection) throws SQLException {
-                return connection.prepareStatement(
-                        "delete from users"
-                );
-            }
-        });
+        jdbcTemplate.update("delete from users");
     }
 
-    public long getCount() throws SQLException {
-        Connection connection = dataSource.getConnection();
-
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "select count(*) as userCount from users"
+    public int getCount() throws SQLException {
+        return jdbcTemplate.queryForObject(
+                "select count(*) as userCount from users",
+                Integer.class
         );
-
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-
-        long userCount = resultSet.getLong("userCount");
-
-        closeConnection(preparedStatement, connection);
-
-        return userCount;
-    }
-
-    private void closeConnection(PreparedStatement preparedStatement, Connection connection) {
-        try {
-            preparedStatement.close();
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

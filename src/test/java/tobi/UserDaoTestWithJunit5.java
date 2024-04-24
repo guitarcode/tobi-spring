@@ -42,7 +42,7 @@ public class UserDaoTestWithJunit5 {
 
         User getUser = userDao.getById("semin");
 
-        Assertions.assertEquals(user1.getUserName(), getUser.getUserName());
+        Assertions.assertEquals(user1.getUsername(), getUser.getUsername());
         Assertions.assertEquals(user1.getPassword(), getUser.getPassword());
     }
 
