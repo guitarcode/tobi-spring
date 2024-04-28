@@ -6,14 +6,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.SQLException;
-
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"/applicationContextTest.xml"})
-public class UserDaoTestWithJunit5 {
+public class JdbcUserDaoTest {
 
     @Autowired
     UserDao userDao;
@@ -29,25 +29,25 @@ public class UserDaoTestWithJunit5 {
     }
 
     @AfterEach
-    public void destroy() throws SQLException {
+    public void destroy() {
         userDao.deleteAll();
     }
 
 
     @Test
-    public void addAndGet() throws SQLException {
+    public void addAndGet() {
         userDao.add(user1);
         userDao.add(user2);
         userDao.add(user3);
 
-        User getUser = userDao.getById("semin");
+        User getUser = userDao.get("semin");
 
         Assertions.assertEquals(user1.getUsername(), getUser.getUsername());
         Assertions.assertEquals(user1.getPassword(), getUser.getPassword());
     }
 
     @Test
-    public void count() throws SQLException {
+    public void count() {
         userDao.add(user1);
         userDao.add(user2);
         userDao.add(user3);
@@ -57,6 +57,15 @@ public class UserDaoTestWithJunit5 {
 
     @Test
     public void notPresentGet() {
-        Assertions.assertThrows(EmptyResultDataAccess.class, () -> userDao.getById("not_present"));
+        Assertions.assertThrows(EmptyResultDataAccessException.class, () -> userDao.get("not_present"));
+    }
+
+    @Test
+    public void duplicateKey() {
+        userDao.add(user1);
+
+        org.assertj.core.api.Assertions
+                .assertThatThrownBy(() -> userDao.add(user1))
+                .isInstanceOf(DataAccessException.class);
     }
 }

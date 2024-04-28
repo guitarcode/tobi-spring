@@ -6,18 +6,18 @@ import java.sql.SQLException;
 
 public class DaoTestCode {
     public static void baseDaoTestCode(ApplicationContext ac) throws SQLException {
-        UserDao userDao = ac.getBean("userDao", UserDao.class);
+        JdbcUserDao jdbcUserDao = ac.getBean("userDao", JdbcUserDao.class);
 
-        userDao.deleteAll();
+        jdbcUserDao.deleteAll();
 
         User newUser = new User();
         newUser.setId("semin");
         newUser.setUsername("최세민");
         newUser.setPassword("semin");
 
-        userDao.add(newUser);
+        jdbcUserDao.add(newUser);
 
-        User getUser = userDao.getById("semin");
+        User getUser = jdbcUserDao.get("semin");
         System.out.println("getUser.getUserName() = " + getUser.getUsername());
     }
 }
