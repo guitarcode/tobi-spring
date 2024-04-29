@@ -1,7 +1,6 @@
 package tobi;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,12 +10,20 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.sql.DataSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"/applicationContextTest.xml"})
 public class JdbcUserDaoTest {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    DataSource dataSource;
+
     User user1;
     User user2;
     User user3;
@@ -42,8 +49,8 @@ public class JdbcUserDaoTest {
 
         User getUser = userDao.get("semin");
 
-        Assertions.assertEquals(user1.getUsername(), getUser.getUsername());
-        Assertions.assertEquals(user1.getPassword(), getUser.getPassword());
+        assertThat(getUser.getUsername()).isEqualTo(user1.getUsername());
+        assertThat(user1.getPassword()).isEqualTo(getUser.getPassword());
     }
 
     @Test
@@ -52,20 +59,21 @@ public class JdbcUserDaoTest {
         userDao.add(user2);
         userDao.add(user3);
 
-        Assertions.assertEquals(3, userDao.getCount());
+        assertThat(userDao.getCount()).isEqualTo(3);
     }
 
     @Test
     public void notPresentGet() {
-        Assertions.assertThrows(EmptyResultDataAccessException.class, () -> userDao.get("not_present"));
+        assertThatThrownBy(() -> userDao.get("not_present"))
+                .isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @Test
     public void duplicateKey() {
         userDao.add(user1);
 
-        org.assertj.core.api.Assertions
-                .assertThatThrownBy(() -> userDao.add(user1))
+
+        assertThatThrownBy(() -> userDao.add(user1))
                 .isInstanceOf(DataAccessException.class);
     }
 }
