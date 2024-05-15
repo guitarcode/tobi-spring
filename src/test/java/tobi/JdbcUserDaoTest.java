@@ -56,8 +56,16 @@ public class JdbcUserDaoTest {
 
         User getUser = userDao.get("semin");
 
-        assertThat(getUser.getUsername()).isEqualTo(user1.getUsername());
-        assertThat(user1.getPassword()).isEqualTo(getUser.getPassword());
+        checkSameUser(user1, getUser);
+    }
+
+    private void checkSameUser(User user1, User user2) {
+        assertThat(user1.getId()).isEqualTo(user2.getId());
+        assertThat(user1.getUsername()).isEqualTo(user2.getUsername());
+        assertThat(user1.getPassword()).isEqualTo(user2.getPassword());
+        assertThat(user1.getLevel()).isEqualTo(user2.getLevel());
+        assertThat(user1.getLogin()).isEqualTo(user2.getLogin());
+        assertThat(user1.getRecommend()).isEqualTo(user2.getRecommend());
     }
 
     @Test
