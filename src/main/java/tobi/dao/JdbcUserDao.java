@@ -44,14 +44,28 @@ public class JdbcUserDao implements UserDao {
                 user.getLevel().getValue(),
                 user.getLogin(),
                 user.getRecommend()
-                );
+        );
+    }
+
+    @Override
+    public void update(User user) {
+        jdbcTemplate.update("update users set " +
+                        "username = ?, password = ?, level = ?, login = ?, recommend = ? " +
+                        "where id = ?",
+                user.getUsername(),
+                user.getPassword(),
+                user.getLevel().getValue(),
+                user.getLogin(),
+                user.getRecommend(),
+                user.getId()
+        );
     }
 
     @Override
     public User get(String id) {
         return jdbcTemplate.queryForObject(
                 "select * from users where id = ?",
-                new Object[] {id},
+                new Object[]{id},
                 mapper
         );
     }
