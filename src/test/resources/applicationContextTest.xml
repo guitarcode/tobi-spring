@@ -13,4 +13,7 @@
     <bean id="userDao" class="tobi.dao.JdbcUserDao">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <bean id="userService" class="tobi.service.UserService">
+        <constructor-arg index="0" ref="userDao"/>
+    </bean>
 </beans>
