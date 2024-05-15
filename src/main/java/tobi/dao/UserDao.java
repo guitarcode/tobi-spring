@@ -1,4 +1,6 @@
-package tobi;
+package tobi.dao;
+
+import tobi.domain.User;
 
 import java.util.List;
 

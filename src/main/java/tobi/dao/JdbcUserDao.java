@@ -1,7 +1,8 @@
-package tobi;
+package tobi.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import tobi.domain.User;
 
 import javax.sql.DataSource;
 import java.util.List;

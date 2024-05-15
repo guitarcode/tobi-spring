@@ -1,4 +1,4 @@
-package tobi;
+package tobi.connection;
 
 import java.sql.Connection;
 

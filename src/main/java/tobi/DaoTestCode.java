@@ -1,6 +1,8 @@
 package tobi;
 
 import org.springframework.context.ApplicationContext;
+import tobi.dao.JdbcUserDao;
+import tobi.domain.User;
 
 import java.sql.SQLException;
 

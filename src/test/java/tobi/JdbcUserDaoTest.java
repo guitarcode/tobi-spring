@@ -12,6 +12,8 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import tobi.domain.User;
+import tobi.dao.UserDao;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;

@@ -1,9 +1,10 @@
-package tobi;
+package tobi.config;
 
 import com.mysql.cj.jdbc.Driver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import tobi.dao.JdbcUserDao;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;

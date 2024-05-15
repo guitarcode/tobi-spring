@@ -1,9 +1,8 @@
 package tobi;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import tobi.CountingConnectionDaoFactory;
-import tobi.CountingConnectionMaker;
-import tobi.DaoTestCode;
+import tobi.config.CountingConnectionDaoFactory;
+import tobi.connection.CountingConnectionMaker;
 
 import java.sql.SQLException;
 
