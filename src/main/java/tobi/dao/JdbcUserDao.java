@@ -2,6 +2,7 @@ package tobi.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import tobi.domain.Level;
 import tobi.domain.User;
 
 import javax.sql.DataSource;
@@ -15,7 +16,10 @@ public class JdbcUserDao implements UserDao {
         return new User(
                 rs.getString("id"),
                 rs.getString("username"),
-                rs.getString("password")
+                rs.getString("password"),
+                Level.valueOf(rs.getInt("level")),
+                rs.getInt("login"),
+                rs.getInt("recommend")
         );
     };
 
@@ -33,10 +37,14 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void add(User user) {
-        jdbcTemplate.update("insert into users(id, username, password) values (?,?,?)",
+        jdbcTemplate.update("insert into users(id, username, password, level, login, recommend) values (?,?,?,?,?,?)",
                 user.getId(),
                 user.getUsername(),
-                user.getPassword());
+                user.getPassword(),
+                user.getLevel().getValue(),
+                user.getLogin(),
+                user.getRecommend()
+                );
     }
 
     @Override

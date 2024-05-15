@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import tobi.domain.Level;
 import tobi.domain.User;
 import tobi.dao.UserDao;
 
@@ -36,9 +37,9 @@ public class JdbcUserDaoTest {
 
     @BeforeEach
     public void setUp() {
-        user1 = new User("semin", "최세민", "1010");
-        user2 = new User("tobi", "토비", "0729");
-        user3 = new User("younghan", "영한", "0729");
+        user1 = new User("semin", "최세민", "1010", Level.BASIC, 1, 0);
+        user2 = new User("tobi", "토비", "0729", Level.SILVER, 55, 10);
+        user3 = new User("younghan", "영한", "0729", Level.GOLD, 100, 40);
     }
 
     @AfterEach
