@@ -1,5 +1,6 @@
 package tobi.service;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,5 +66,21 @@ public class UserServiceTest {
     void checkLevel(User user, Level expectedLevel) {
         User userUpdate = userDao.get(user.getId());
         assertThat(userUpdate.getLevel()).isEqualTo(expectedLevel);
+    }
+
+    @Test
+    void add() {
+        User userWithLevel = users.get(4);
+        User userWithoutLevel = users.get(0);
+        userWithoutLevel.setLevel(null);
+
+        userService.add(userWithLevel);
+        userService.add(userWithoutLevel);
+
+        User userWithLevelAdd = userDao.get(userWithLevel.getId());
+        User userWithoutLevelAdd = userDao.get(userWithoutLevel.getId());
+
+        assertThat(userWithLevelAdd.getLevel()).isEqualTo(userWithLevel.getLevel());
+        assertThat(userWithoutLevelAdd.getLevel()).isEqualTo(Level.BASIC);
     }
 }
