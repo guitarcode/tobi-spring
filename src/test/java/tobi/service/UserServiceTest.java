@@ -1,6 +1,5 @@
 package tobi.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,6 +72,7 @@ public class UserServiceTest {
         User userWithLevel = users.get(4);
         User userWithoutLevel = users.get(0);
         userWithoutLevel.setLevel(null);
+
 
         userService.add(userWithLevel);
         userService.add(userWithoutLevel);
