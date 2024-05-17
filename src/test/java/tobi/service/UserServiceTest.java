@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static tobi.service.UserService.MIN_LOGIN_COUNT_FOR_SILVER;
-import static tobi.service.UserService.MIN_RECOMMEND_COUNT_FOR_GOLD;
+import static tobi.service.DefaultUserLevelUpgradePolicy.MIN_LOGIN_COUNT_FOR_SILVER;
+import static tobi.service.DefaultUserLevelUpgradePolicy.MIN_RECOMMEND_COUNT_FOR_GOLD;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"/applicationContextTest.xml"})
