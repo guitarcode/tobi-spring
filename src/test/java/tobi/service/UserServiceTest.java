@@ -24,6 +24,8 @@ public class UserServiceTest {
     @Autowired
     UserService userService;
     @Autowired
+    UserLevelUpgradePolicy userLevelUpgradePolicy;
+    @Autowired
     UserDao userDao;
 
     List<User> users;
@@ -57,14 +59,14 @@ public class UserServiceTest {
 
         userService.upgradeLevels();
 
-        checkLevel(users.get(0), false);
-        checkLevel(users.get(1), true);
-        checkLevel(users.get(2), false);
-        checkLevel(users.get(3),true);
-        checkLevel(users.get(4), false);
+        checkLevelUpgraded(users.get(0), false);
+        checkLevelUpgraded(users.get(1), true);
+        checkLevelUpgraded(users.get(2), false);
+        checkLevelUpgraded(users.get(3),true);
+        checkLevelUpgraded(users.get(4), false);
     }
 
-    void checkLevel(User user, boolean upgraded) {
+    void checkLevelUpgraded(User user, boolean upgraded) {
         User userUpdate = userDao.get(user.getId());
 
         if (upgraded) {
@@ -89,5 +91,41 @@ public class UserServiceTest {
 
         assertThat(userWithLevelAdd.getLevel()).isEqualTo(userWithLevel.getLevel());
         assertThat(userWithoutLevelAdd.getLevel()).isEqualTo(Level.BASIC);
+    }
+
+    @Test
+    void upgradeAllOrNothing() {
+        userLevelUpgradePolicy = new TestUserLevelUpgradePolicy(userDao, users.get(3).getId());
+
+        for (User user : users) {
+            userDao.add(user);
+        }
+
+        try {
+            userService.upgradeLevels();
+        } catch (TestUserServiceException e) {
+        }
+
+        checkLevelUpgraded(users.get(1), false);
+    }
+
+    static class TestUserLevelUpgradePolicy extends DefaultUserLevelUpgradePolicy {
+        String id;
+
+        public TestUserLevelUpgradePolicy(UserDao userDao, String id) {
+            super(userDao);
+            this.id = id;
+        }
+
+        @Override
+        public void upgradeLevel(User user) {
+            if(id.equals(user.getId())) {
+                throw new TestUserServiceException();
+            }
+            super.upgradeLevel(user);
+        }
+    }
+
+    static class TestUserServiceException extends RuntimeException {
     }
 }
