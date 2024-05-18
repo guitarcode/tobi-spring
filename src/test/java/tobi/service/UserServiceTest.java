@@ -11,6 +11,8 @@ import tobi.dao.UserDao;
 import tobi.domain.Level;
 import tobi.domain.User;
 
+import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +23,8 @@ import static tobi.service.DefaultUserLevelUpgradePolicy.MIN_RECOMMEND_COUNT_FOR
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"/applicationContextTest.xml"})
 public class UserServiceTest {
+    @Autowired
+    DataSource dataSource;
     @Autowired
     UserService userService;
     @Autowired
@@ -52,7 +56,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void upgradeLevels() {
+    void upgradeLevels() throws SQLException {
         for (User user : users) {
             userDao.add(user);
         }
@@ -94,8 +98,9 @@ public class UserServiceTest {
     }
 
     @Test
-    void upgradeAllOrNothing() {
+    void upgradeAllOrNothing() throws SQLException {
         userLevelUpgradePolicy = new TestUserLevelUpgradePolicy(userDao, users.get(3).getId());
+        userService = new UserService(dataSource, userDao, userLevelUpgradePolicy);
 
         for (User user : users) {
             userDao.add(user);

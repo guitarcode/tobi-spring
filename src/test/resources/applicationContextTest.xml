@@ -17,6 +17,7 @@
         <constructor-arg name="userDao" ref="userDao"/>
     </bean>
     <bean id="userService" class="tobi.service.UserService">
+        <constructor-arg name="dataSource" ref="dataSource"/>
         <constructor-arg name="userDao" ref="userDao"/>
         <constructor-arg name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
     </bean>
