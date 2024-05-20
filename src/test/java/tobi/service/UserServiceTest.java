@@ -7,12 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.PlatformTransactionManager;
 import tobi.dao.UserDao;
 import tobi.domain.Level;
 import tobi.domain.User;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,13 +23,13 @@ import static tobi.service.DefaultUserLevelUpgradePolicy.MIN_RECOMMEND_COUNT_FOR
 @ContextConfiguration(locations = {"/applicationContextTest.xml"})
 public class UserServiceTest {
     @Autowired
-    DataSource dataSource;
-    @Autowired
     UserService userService;
     @Autowired
     UserLevelUpgradePolicy userLevelUpgradePolicy;
     @Autowired
     UserDao userDao;
+    @Autowired
+    PlatformTransactionManager transactionManager;
 
     List<User> users;
 
@@ -73,8 +72,7 @@ public class UserServiceTest {
     @Test
     void upgradeAllOrNothing() {
         userLevelUpgradePolicy = new TestUserLevelUpgradePolicy(userDao, users.get(3).getId());
-        userService = new UserService(dataSource, userDao, userLevelUpgradePolicy);
-
+        userService = new UserService(userDao, userLevelUpgradePolicy, transactionManager);
         for (User user : users) {
             userDao.add(user);
         }
