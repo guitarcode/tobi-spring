@@ -56,7 +56,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void upgradeLevels() throws SQLException {
+    void upgradeLevels() {
         for (User user : users) {
             userDao.add(user);
         }
@@ -68,6 +68,23 @@ public class UserServiceTest {
         checkLevelUpgraded(users.get(2), false);
         checkLevelUpgraded(users.get(3),true);
         checkLevelUpgraded(users.get(4), false);
+    }
+
+    @Test
+    void upgradeAllOrNothing() {
+        userLevelUpgradePolicy = new TestUserLevelUpgradePolicy(userDao, users.get(3).getId());
+        userService = new UserService(dataSource, userDao, userLevelUpgradePolicy);
+
+        for (User user : users) {
+            userDao.add(user);
+        }
+
+        try {
+            userService.upgradeLevels();
+        } catch (TestUserServiceException e) {
+        }
+
+        checkLevelUpgraded(users.get(1), false);
     }
 
     void checkLevelUpgraded(User user, boolean upgraded) {
@@ -95,23 +112,6 @@ public class UserServiceTest {
 
         assertThat(userWithLevelAdd.getLevel()).isEqualTo(userWithLevel.getLevel());
         assertThat(userWithoutLevelAdd.getLevel()).isEqualTo(Level.BASIC);
-    }
-
-    @Test
-    void upgradeAllOrNothing() throws SQLException {
-        userLevelUpgradePolicy = new TestUserLevelUpgradePolicy(userDao, users.get(3).getId());
-        userService = new UserService(dataSource, userDao, userLevelUpgradePolicy);
-
-        for (User user : users) {
-            userDao.add(user);
-        }
-
-        try {
-            userService.upgradeLevels();
-        } catch (TestUserServiceException e) {
-        }
-
-        checkLevelUpgraded(users.get(1), false);
     }
 
     static class TestUserLevelUpgradePolicy extends DefaultUserLevelUpgradePolicy {
