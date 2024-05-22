@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.springframework:spring-core:6.1.6'
     implementation 'org.springframework:spring-context:6.1.6'
     implementation 'org.springframework:spring-jdbc:6.1.6'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
 
     implementation 'com.mysql:mysql-connector-j:8.3.0'
 
