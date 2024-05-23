@@ -44,12 +44,12 @@ public class DefaultUserLevelUpgradePolicy implements UserLevelUpgradePolicy {
 
     private void sendUpgradeEmail(User user) {
         Properties properties = new Properties();
-        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.host", "localhost");
         Session session = Session.getInstance(properties);
 
         MimeMessage message = new MimeMessage(session);
         try {
-            message.setFrom(new InternetAddress("choicco89@gmail.com"));
+            message.setFrom(new InternetAddress("test@test.com"));
             message.setRecipients(Message.RecipientType.TO,
                     new InternetAddress[]{new InternetAddress(user.getId())});
             message.setSubject("Upgrade 안내");
